@@ -1,0 +1,32 @@
+{
+  "name": "Skyrim (simplified)",
+  "source": "Location names from The Elder Scrolls V: Skyrim (Bethesda), see https://en.uesp.net/wiki/Skyrim:Transport. Travel times are estimated for this project.",
+  "unit": "hours",
+  "routes": [
+    { "from": "Helgen",              "to": "Riverwood",           "hours": 2 },
+    { "from": "Riverwood",           "to": "Whiterun",            "hours": 2 },
+    { "from": "Riverwood",           "to": "Falkreath",           "hours": 3 },
+    { "from": "Helgen",              "to": "Ivarstead",           "hours": 3 },
+    { "from": "Ivarstead",           "to": "Riften",              "hours": 3 },
+    { "from": "Ivarstead",           "to": "High Hrothgar",       "hours": 3, "note": "the 7,000 steps" },
+    { "from": "High Hrothgar",       "to": "Throat of the World", "hours": 1 },
+    { "from": "Whiterun",            "to": "Rorikstead",          "hours": 3 },
+    { "from": "Rorikstead",          "to": "Markarth",            "hours": 4 },
+    { "from": "Whiterun",            "to": "Morthal",             "hours": 4 },
+    { "from": "Morthal",             "to": "Solitude",            "hours": 3 },
+    { "from": "Solitude",            "to": "Dragon Bridge",       "hours": 2 },
+    { "from": "Dragon Bridge",       "to": "Markarth",            "hours": 5 },
+    { "from": "Whiterun",            "to": "Windhelm",            "hours": 8, "note": "direct road, but slower" },
+    { "from": "Whiterun",            "to": "Valtheim Towers",     "hours": 3 },
+    { "from": "Valtheim Towers",     "to": "Windhelm",            "hours": 3 },
+    { "from": "Windhelm",            "to": "Riften",              "hours": 5 },
+    { "from": "Windhelm",            "to": "Winterhold",          "hours": 4 },
+    { "from": "Winterhold",          "to": "Dawnstar",            "hours": 4 },
+    { "from": "Dawnstar",            "to": "Morthal",             "hours": 4 },
+    { "from": "Raven Rock",          "to": "Skaal Village",       "hours": 2, "note": "Solstheim, cut off from the mainland" },
+    { "from": "Throat of the World", "to": "Riverwood",           "hours": 1, "one_way": true, "note": "sliding down the mountain" }
+  ],
+  "isolated": [
+    { "name": "Soul Cairn", "note": "another realm, no roads" }
+  ]
+}
