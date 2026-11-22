@@ -59,6 +59,6 @@ class WorldMap:
     def __str__(self):
         lines = []
         for name, routes in self.adj.items():
-            links = ", ".join(f"{n} ({w})" for n, w in routes.items()) or "(no edges)"
+            links = ", ".join(f"{n} ({w}h)" for n, w in routes.items()) or "(no edges)"
             lines.append(f"{name} -> {links}")
         return "\n".join(lines)
