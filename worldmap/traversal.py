@@ -5,35 +5,41 @@ from collections import deque
 
 def bfs(world, start):
     """Breadth-first search from start. Return a list of locations in the order they are visited."""
-    if start not in world: #guard against unreachable locations
+    if start not in world: # guard against non-existent locations
         return []
-    visited = set()
+    visited = {start}
     order = []
-    queue = deque()
-   
+    queue = deque([start])
+
     while queue:
-       location = queue.popleft()
-       order.append(location)
-       for neighbor_name in world.get_neighbors(location):
-           if neighbor_name not in visited:
-               visited.add(neighbor_name)
-               queue.append(neighbor_name)
+        location = queue.popleft()
+        order.append(location)
+        for neighbor_name in world.get_neighbors(location):
+            if neighbor_name not in visited:
+                visited.add(neighbor_name)  # mark when queued so nothing is queued twice
+                queue.append(neighbor_name)
     return order
 
 
 def dfs(world, start):
     """Depth-first search from start. Return a list of locations in the order they are visited."""
-    # TODO 1: If start is not in the world, return an empty list.
-    # TODO 2: Make a set called visited (empty), a list called order (empty), and a stack (list) holding start.
-    # TODO 3: While the stack is not empty:
-    #     a. Pop a location from the END of the stack.
-    #     b. If it is already in visited, skip it (continue).
-    #     c. Add it to visited and append it to order.
-    #     d. Push each neighbor in world.neighbors(location) that is not in visited onto the stack.
-    #        Tip: push them in reversed order if you want neighbors visited in the order they were added.
-    # TODO 4: Return order.
-    # (Recursive version is fine too: a helper that visits a location, then calls itself on each unvisited neighbor.)
-    raise NotImplementedError("TODO: write dfs")
+    if start not in world:  # guard against non-existent locations
+        return []
+    visited = set()  # empty: start is marked visited when it is popped
+    order = []
+    stack = [start]
+
+    while stack:
+        location = stack.pop()
+        if location in visited:  # same place pushed twice by two different roads
+            continue
+        visited.add(location)
+        order.append(location)
+        # push in reverse so the first neighbor ends up on top and is visited first
+        for neighbor_name in reversed(world.get_neighbors(location)):
+            if neighbor_name not in visited:
+                stack.append(neighbor_name)
+    return order
 
 
 def is_reachable(world, start, goal):
