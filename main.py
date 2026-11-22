@@ -6,11 +6,8 @@ from worldmap.traversal import bfs, dfs, fewest_roads, is_reachable
 
 
 def check(label, func):
-    """Run one check and print its result, or note that the code is still a TODO."""
-    try:
-        print(f"{label}: {func()}")
-    except NotImplementedError as e:
-        print(f"{label}: not done yet ({e})")
+    """Run one check and print its result."""
+    print(f"{label}: {func()}")
 
 
 def main():
