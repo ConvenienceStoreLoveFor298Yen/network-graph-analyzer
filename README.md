@@ -11,8 +11,7 @@ Run these from the project folder (the one containing `main.py`):
     python -m unittest -v
 
 `python main.py` prints the map, then runs each
-expected result from `sample_world.py`. Anything still unwritten shows as
-"not done yet".
+expected result from `sample_world.py`.
 
 ## Structure
     worldmap/graph.py         WorldMap class (weighted adjacency list)
@@ -55,25 +54,25 @@ The map includes a few special cases on purpose:
 Output of `python main.py`:
 
 ```
-Helgen -> Riverwood (2), Ivarstead (3)
-Riverwood -> Helgen (2), Whiterun (2), Falkreath (3)
-Whiterun -> Riverwood (2), Rorikstead (3), Morthal (4), Windhelm (8), Valtheim Towers (3)
-Falkreath -> Riverwood (3)
-Ivarstead -> Helgen (3), Riften (3), High Hrothgar (3)
-Riften -> Ivarstead (3), Windhelm (5)
-High Hrothgar -> Ivarstead (3), Throat of the World (1)
-Throat of the World -> High Hrothgar (1), Riverwood (1)
-Rorikstead -> Whiterun (3), Markarth (4)
-Markarth -> Rorikstead (4), Dragon Bridge (5)
-Morthal -> Whiterun (4), Solitude (3), Dawnstar (4)
-Solitude -> Morthal (3), Dragon Bridge (2)
-Dragon Bridge -> Solitude (2), Markarth (5)
-Windhelm -> Whiterun (8), Valtheim Towers (3), Riften (5), Winterhold (4)
-Valtheim Towers -> Whiterun (3), Windhelm (3)
-Winterhold -> Windhelm (4), Dawnstar (4)
-Dawnstar -> Winterhold (4), Morthal (4)
-Raven Rock -> Skaal Village (2)
-Skaal Village -> Raven Rock (2)
+Helgen -> Riverwood (2h), Ivarstead (3h)
+Riverwood -> Helgen (2h), Whiterun (2h), Falkreath (3h)
+Whiterun -> Riverwood (2h), Rorikstead (3h), Morthal (4h), Windhelm (8h), Valtheim Towers (3h)
+Falkreath -> Riverwood (3h)
+Ivarstead -> Helgen (3h), Riften (3h), High Hrothgar (3h)
+Riften -> Ivarstead (3h), Windhelm (5h)
+High Hrothgar -> Ivarstead (3h), Throat of the World (1h)
+Throat of the World -> High Hrothgar (1h), Riverwood (1h)
+Rorikstead -> Whiterun (3h), Markarth (4h)
+Markarth -> Rorikstead (4h), Dragon Bridge (5h)
+Morthal -> Whiterun (4h), Solitude (3h), Dawnstar (4h)
+Solitude -> Morthal (3h), Dragon Bridge (2h)
+Dragon Bridge -> Solitude (2h), Markarth (5h)
+Windhelm -> Whiterun (8h), Valtheim Towers (3h), Riften (5h), Winterhold (4h)
+Valtheim Towers -> Whiterun (3h), Windhelm (3h)
+Winterhold -> Windhelm (4h), Dawnstar (4h)
+Dawnstar -> Winterhold (4h), Morthal (4h)
+Raven Rock -> Skaal Village (2h)
+Skaal Village -> Raven Rock (2h)
 Soul Cairn -> (no edges)
 
 BFS from Whiterun: ['Whiterun', 'Riverwood', 'Rorikstead', 'Morthal', 'Windhelm', 'Valtheim Towers', 'Helgen', 'Falkreath', 'Markarth', 'Solitude', 'Dawnstar', 'Riften', 'Winterhold', 'Ivarstead', 'Dragon Bridge', 'High Hrothgar', 'Throat of the World']
@@ -95,10 +94,13 @@ All 19 tests pass (`Ran 19 tests ... OK`). The Actual column is what the code re
 
 | Test | Type | What it tests | Expected | Actual |
 |---|---|---|---|---|
+| `test_add_vertex_no_duplicates` | Normal | adding the same vertex twice | only one A | ['A'] (pass) |
 | `test_add_edge_is_directed_with_default_weight` | Normal | add_edge is one-way with weight 1 | A has {B: 1}, B has no edges | A has {B: 1}, B has {} (pass) |
 | `test_add_route_is_two_way` | Normal | add_route connects both ways | A to B and B to A, 4 hours each | A: {B: 4}, B: {A: 4} (pass) |
+| `test_sample_world_connections` | Normal | the Skyrim map loads correctly from JSON | 20 locations; Riverwood connects to Helgen (2), Whiterun (2), Falkreath (3) | 20 locations; {Helgen: 2, Whiterun: 2, Falkreath: 3} (pass) |
 | `test_bfs_visits_every_mainland_location` | Normal | BFS from Whiterun reaches the whole mainland | all 17 mainland locations, starting with Whiterun | 17 locations, first is Whiterun (pass) |
 | `test_bfs_visits_neighbors_before_farther_places` | Normal | BFS goes level by level | Whiterun's 5 neighbors come right after Whiterun | Riverwood, Rorikstead, Morthal, Windhelm, Valtheim Towers (pass) |
+| `test_dfs_visits_every_mainland_location` | Normal | DFS from Whiterun reaches the whole mainland | all 17 mainland locations, starting with Whiterun | 17 locations, first is Whiterun (pass) |
 | `test_dfs_goes_deep_first` | Normal | DFS follows one path before backing up | 3rd location is a neighbor of the 2nd | Whiterun, Riverwood, Helgen: Helgen is a neighbor of Riverwood (pass) |
 | `test_bfs_has_no_duplicates` / `test_dfs_has_no_duplicates` | Repeated visits | Whiterun loop is not visited twice | no location appears twice | BFS: 17 visited, 17 unique; DFS: 17 visited, 17 unique (pass) |
 | `test_small_cycle` | Repeated visits | A to B to C to A does not loop forever | A, B, C each once | BFS and DFS both return A, B, C (pass) |
