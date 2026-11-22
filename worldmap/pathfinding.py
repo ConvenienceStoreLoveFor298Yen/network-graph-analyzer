@@ -10,21 +10,23 @@ def dijkstra(world, start):
         best_time: {location: fewest total hours from start}
         came_from: {location: the location just before it on the fastest route (start maps to None)}
     """
-    # TODO 1: If start is not in the world, return ({}, {}).
-    # TODO 2: Set best_time = {start: 0} and came_from = {start: None}.
-    # TODO 3: Make the frontier, a heap of (total_time, location) tuples, starting with (0, start).
-    # TODO 4: While the frontier is not empty:
-    #     a. heappop the smallest (total_time, location).
-    #     b. If total_time > best_time[location], it is an old, slower entry, so skip it (continue).
-    #     c. Loop over world.neighbors(location).items() to get each (neighbor, hours).
-    #        (.items() is needed because neighbors is a dict, unlike the list of tuples on the Ed slide.)
-    #     d. candidate = total_time + hours
-    #     e. If candidate < best_time.get(neighbor, float("inf")):
-    #            set best_time[neighbor] = candidate
-    #            set came_from[neighbor] = location
-    #            heappush (candidate, neighbor) onto the frontier
-    # TODO 5: Return best_time, came_from.
-    raise NotImplementedError("TODO: write dijkstra")
+    if start not in world:  # guard against non-existent locations
+        return {}, {}
+    best_time = {start: 0}
+    came_from = {start: None}
+    frontier = [(0, start)]  # heap of (total_time, location), smallest time on top
+
+    while frontier:
+        total_time, location = heappop(frontier)
+        if total_time > best_time[location]:  # old, slower entry for a place already improved
+            continue
+        for neighbor, hours in world.get_neighbors(location).items():
+            candidate = total_time + hours
+            if candidate < best_time.get(neighbor, float("inf")):  # found a faster way there
+                best_time[neighbor] = candidate
+                came_from[neighbor] = location
+                heappush(frontier, (candidate, neighbor))
+    return best_time, came_from
 
 
 def build_path(came_from, goal):
