@@ -2,12 +2,19 @@
 
 from collections import deque
 
+from worldmap.pathfinding import build_path
 
-def bfs(world, start):
-    """Breadth-first search from start. Return a list of locations in the order they are visited."""
-    if start not in world: # guard against non-existent locations
-        return []
-    visited = {start}
+
+def _bfs_search(world, start):
+    """Run BFS from start. Return (order, came_from).
+
+    order:     locations in the order they are visited
+    came_from: {location: the location it was first reached from (start maps to None)}.
+               Its keys also act as the visited set.
+    """
+    if start not in world:  # guard against non-existent locations
+        return [], {}
+    came_from = {start: None}
     order = []
     queue = deque([start])
 
@@ -15,9 +22,15 @@ def bfs(world, start):
         location = queue.popleft()
         order.append(location)
         for neighbor_name in world.get_neighbors(location):
-            if neighbor_name not in visited:
-                visited.add(neighbor_name)  # mark when queued so nothing is queued twice
+            if neighbor_name not in came_from:  # mark when queued so nothing is queued twice
+                came_from[neighbor_name] = location
                 queue.append(neighbor_name)
+    return order, came_from
+
+
+def bfs(world, start):
+    """Breadth-first search from start. Return a list of locations in the order they are visited."""
+    order, _ = _bfs_search(world, start)
     return order
 
 
@@ -44,33 +57,14 @@ def dfs(world, start):
 
 def is_reachable(world, start, goal):
     """Return True if goal can be reached from start by following routes."""
-    if start not in world or goal not in world:
-        return False
-    return goal in bfs(world, start)
+    _, came_from = _bfs_search(world, start)
+    return goal in came_from
 
 
 def fewest_roads(world, start, goal):
     """Return the route from start to goal that uses the fewest roads (ignores hours), or None if unreachable.
 
-    Uses the same idea as BFS, but remembers where each location was reached from.
+    BFS reaches each location by the fewest roads first, so following came_from back from goal gives that route.
     """
-    if start not in world or goal not in world:
-        return None
-    came_from = {start: None}
-    queue = deque([start])
-    while queue:
-        location = queue.popleft()
-        if location == goal:
-            break
-        for neighbor in world.neighbors(location):
-            if neighbor not in came_from:
-                came_from[neighbor] = location
-                queue.append(neighbor)
-    if goal not in came_from:
-        return None
-    path = []
-    step = goal
-    while step is not None:
-        path.append(step)
-        step = came_from[step]
-    return path[::-1]
+    _, came_from = _bfs_search(world, start)
+    return build_path(came_from, goal)
